@@ -16,13 +16,16 @@ const Footer: React.FC = () => {
   return (
     <FooterContainer>
       <LeftSection>
+        <Logo>
+          <span>Info</span>
+        </Logo>
         <LanguageSelector>
           <LanguageLink href="#" className="active">ENG</LanguageLink>
           <LanguageLink href="#">ESP</LanguageLink>
           <LanguageLink href="#">SVE</LanguageLink>
         </LanguageSelector>
       </LeftSection>
-      Bonjour
+      
       <RightSection>
         <NavColumn>
           <NavTitle>Info</NavTitle>
