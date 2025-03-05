@@ -18,7 +18,6 @@ const Footer: React.FC = () => {
       <LeftSection>
         <Logo>
           <span>Info</span>
-          <span>QR</span>
         </Logo>
         <LanguageSelector>
           <LanguageLink href="#" className="active">ENG</LanguageLink>
