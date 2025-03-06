@@ -1,11 +1,13 @@
-// src/app/page.tsx (ou un autre fichier de page)
-import Button from '../components/Button';
+import NewThisWeek from "@/components/NewThisWeek";
+import Recherche from "../components/Recherche"
+import NewCollection from "@/components/NewCollection";
 
 export default function Page() {
   return (
     <div>
-      <h1>Bienvenue sur ma page !</h1>
-      <Button>Cliquer ici</Button>
+      <Recherche />
+      <NewCollection />
+      <NewThisWeek />
     </div>
   );
 }

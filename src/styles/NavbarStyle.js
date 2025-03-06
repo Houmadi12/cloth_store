@@ -4,7 +4,7 @@ export const NavContainer = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px 5%;
+  padding: 40px 2%;
   width: 100%;
   position: relative;
 
@@ -32,6 +32,10 @@ export const NavLinks = styled.div`
 export const NavLink = styled.a`
   color: var(--color-text-primary);
   text-decoration: none;
+  font-size: 18px;
+  font-weight: 400px;
+  letter: 2px;
+
   &:hover {
     color: var(--color-text-secondary);
   }

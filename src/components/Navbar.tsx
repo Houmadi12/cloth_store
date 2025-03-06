@@ -51,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({ homePath = "/" }) => {
       <NavContainer>
         <LeftSection>
           <IconButtonMenu onClick={toggleMobileMenu}>
-            {isMobileMenuOpen ? <BiX size={24} /> : <BiMenuAltLeft size={24} />}
+            {isMobileMenuOpen ? <BiX size={44} /> : <BiMenuAltLeft size={35} />}
           </IconButtonMenu>
 
           <NavLinks>
