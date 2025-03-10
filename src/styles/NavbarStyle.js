@@ -4,9 +4,14 @@ export const NavContainer = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px 2%;
+  padding: 30px 2%;
   width: 100%;
-  position: relative;
+  position: fixed;
+  top: 0; 
+  left: 0;
+  z-index: 1000; 
+  background-color: #f3f3f3; 
+  box-shadow: 0 2px 10px rgba(146, 144, 144, 0.1);
 
   @media (max-width: 400px) {
     padding: 20px 0;
@@ -54,19 +59,20 @@ export const Logo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
-
+`;
 
 export const RightSection = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
 `;
+
 export const RightSectionRight = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
 `;
+
 export const RightSectionLeft = styled.div`
   display: flex;
   align-items: center;
@@ -77,7 +83,7 @@ export const IconButtonUser = styled.button`
   color: white;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 4px 7px;
   position: relative;
   border-radius: 50%;
   border: 1px solid black;
@@ -166,6 +172,18 @@ export const IconButtonMenu = styled.button`
   }
 `;
 
+export const MobileOnlyIcon = styled.span`
+  @media (min-width: 769px) {
+    display: none;
+  }
+`;
+
+export const DesktopOnlyIcon = styled.span`
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
 export const CartBadge = styled.span`
   position: absolute;
   top: -4px;
@@ -188,11 +206,12 @@ export const MobileMenu = styled.div`
     width: 70%;
     height: 100%;
     background-color: white;
-    z-index: 100;
+    z-index: 1001; /* Higher than the fixed navbar */
     transition: left 0.3s ease-in-out;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
   }
 `;
+
 export const MobileNavLinks = styled.div`
   display: none;
 
@@ -219,5 +238,14 @@ export const MobileNavLinks = styled.div`
         color: var(--color-text-secondary);
       }
     }
+  }
+`;
+
+// Add this component to create proper spacing below the fixed navbar
+export const NavbarSpacer = styled.div`
+  height: ${props => props.height || '120px'}; /* Should match navbar height + padding */
+  
+  @media (max-width: 400px) {
+    height: ${props => props.mobileHeight || '80px'};
   }
 `;

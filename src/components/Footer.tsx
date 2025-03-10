@@ -1,45 +1,74 @@
-"use client"
-import React from 'react';
-import { 
-  FooterContainer, 
-  LeftSection, 
-  RightSection, 
-  NavColumn, 
-  NavTitle, 
-  NavLink, 
-  LanguageSelector, 
-  LanguageLink, 
-  Logo 
-} from '../styles/FooterStyle';
+"use client";
 
-const Footer: React.FC = () => {
+import React from "react";
+import {
+  Container,
+  InfoSection,
+  InfoHeader,
+  InfoList,
+  InfoItem,
+  LanguageSection,
+  TechnologiesSection,
+  Logo,
+  LogoTriangle,
+  LogoText,
+  TechDescription,
+  TechText,
+  TechDivider,
+} from "@/styles/FooterStyle";
+
+const Footer = () => {
   return (
-    <FooterContainer>
-      <LeftSection>
+    <Container>
+      <InfoSection>
+        <div>
+          <InfoHeader>Info</InfoHeader>
+          <InfoList>
+            <InfoItem>PRICING</InfoItem>
+            <InfoItem>ABOUT</InfoItem>
+            <InfoItem>CONTACTS</InfoItem>
+          </InfoList>
+        </div>
+
+        <LanguageSection>
+          <InfoHeader>Languages</InfoHeader>
+          <InfoList>
+            <InfoItem>ENG</InfoItem>
+            <InfoItem>ESP</InfoItem>
+            <InfoItem>SVE</InfoItem>
+          </InfoList>
+        </LanguageSection>
+      </InfoSection>
+
+      <TechnologiesSection>
+        <InfoHeader>Technologies</InfoHeader>
+
         <Logo>
-          <span>Info</span>
+          <Logo>
+            <svg
+              width="70"
+              height="70"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 5V19L2 12L12 5Z" fill="#E5E5E5" />
+              <path d="M12 5V19L22 12L12 5Z" fill="#000000" />
+            </svg>
+          </Logo>
+          <LogoText>
+            XIV
+            <br />
+            QR
+          </LogoText>
         </Logo>
-        <LanguageSelector>
-          <LanguageLink href="#" className="active">ENG</LanguageLink>
-          <LanguageLink href="#">ESP</LanguageLink>
-          <LanguageLink href="#">SVE</LanguageLink>
-        </LanguageSelector>
-      </LeftSection>
-      
-      <RightSection>
-        <NavColumn>
-          <NavTitle>Info</NavTitle>
-          <NavLink href="#">Pricing</NavLink>
-          <NavLink href="#">About</NavLink>
-          <NavLink href="#">Contacts</NavLink>
-        </NavColumn>
-        
-        <NavColumn>
-          <NavTitle>Technologies</NavTitle>
-          <NavLink href="#">Near-field communication</NavLink>
-        </NavColumn>
-      </RightSection>
-    </FooterContainer>
+
+        <TechDescription>
+          <TechText>© 2024 — copyright</TechText>
+          <TechDivider />
+        </TechDescription>
+      </TechnologiesSection>
+    </Container>
   );
 };
 

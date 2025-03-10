@@ -73,9 +73,16 @@ export const ProductImageContainer = styled.div`
   width: 100%;
   height: 350px;
   background-color: #f5f6fa;
+  border: 1px solid #d5dbdb;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    border-color: #999;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
 `;
 
 export const AddButton = styled.button`

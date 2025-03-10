@@ -88,7 +88,7 @@ const Navbar: React.FC<NavbarProps> = ({ homePath = "/" }) => {
           </RightSectionLeft>
 
           <RightSectionRight>
-            <IconButtonUser>
+            <IconButtonUser as="a" href="/connexion">
               <BiUser size={24} />
             </IconButtonUser>
           </RightSectionRight>

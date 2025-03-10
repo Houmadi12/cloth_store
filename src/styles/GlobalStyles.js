@@ -22,6 +22,8 @@ export const GlobalStyle = createGlobalStyle`
     background-color: #f3f3f3;
     color:rgb(2, 4, 15);
     line-height: 1.6;
+    max-width: 100%;
+    overflow-x: hidden;
     ${'' /* padding: 0px 5%; */}
   }
 

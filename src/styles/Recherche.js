@@ -4,7 +4,7 @@ export const FilterContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 2rem;
-  margin-top: 0.5rem;
+  margin-top: 10rem;
   background-color: #f3f3f3;
 `
 
