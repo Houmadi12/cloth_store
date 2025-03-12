@@ -60,10 +60,10 @@ const SizeIndicator = styled.div`
   margin-bottom: 6px; 
 `;
 
-const ColorBox = styled.div`
+const ColorBox = styled.div<{ $backgroundColor: string }>`
   width: 28px; 
   height: 28px; 
-  background-color: black;
+  background-color: ${props => props.$backgroundColor};
   border: 1px solid rgb(56, 53, 53);
 `;
 
@@ -115,15 +115,23 @@ const ProductPrice = styled.div`
   font-size: 15px; 
 `;
 
-interface ProductCardProps {
+export interface ProductCardProps {
   imageSrc: string;
   category: string;
-  colorCount?: number;
+  colorCount: number;
   title: string;
   price: number;
+  backgroundColor?: string; 
 }
 
-const ProductCard = () => {
+const ProductCard: React.FC<ProductCardProps> = ({ 
+  imageSrc, 
+  category, 
+  colorCount, 
+  title, 
+  price,
+  backgroundColor = 'black'
+}) => {
   const [quantity, setQuantity] = useState(1);
 
   const increaseQuantity = () => {
@@ -138,8 +146,8 @@ const ProductCard = () => {
     <CardContainer>
       <ImageContainer>
         <ProductImage 
-          src="/images/img13.jpeg" 
-          alt="Cotton T Shirt" 
+          src={imageSrc}
+          alt="image"
         />
         <CloseButton>
           <IoClose size={18} color="#333" />
@@ -148,7 +156,7 @@ const ProductCard = () => {
       
       <SideControls>
         <SizeIndicator>L</SizeIndicator>
-        <ColorBox />
+        <ColorBox $backgroundColor={backgroundColor} />
         <ControlButton onClick={increaseQuantity}>
           <IoMdAdd size={14} />
         </ControlButton>
@@ -162,10 +170,10 @@ const ProductCard = () => {
       </SideControls>
       
       <ProductDetails>
-        <ProductType>Cotton T Shirt</ProductType>
+        <ProductType>{category}</ProductType>
         <DetailsRow>
-          <ProductName>Full Sleeve Zipper</ProductName>
-          <ProductPrice>$99</ProductPrice>
+          <ProductName>{title}</ProductName>
+          <ProductPrice>{price}</ProductPrice>
         </DetailsRow>
       </ProductDetails>
     </CardContainer>
