@@ -1,10 +1,13 @@
 export interface Product {
-  image: string;
-  category: string;
-  colors: number;
-  name: string;
-  price: number;
-}
+    id: number;
+    name: string;
+    price: number;
+    image: string;
+    category: string;
+    colors?: number;
+    rating?: number;
+    Colors?: number;
+  }
 
 // Sample product data
 export const products = [
