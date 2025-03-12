@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { FiArrowLeft, FiChevronDown } from "react-icons/fi";
 import InformationStep from "@/components/InformationStep";
 import ShippingStep from "@/components/ShippingStep";
+import PaymentStep from "@/components/PaymentStep"
 
 // Styled Components
 const CheckoutContainer = styled.div`
@@ -61,27 +62,13 @@ const ContentContainer = styled.div`
   margin-top: 20px;
 `;
 
-// Composants de chaque étape
-// const InformationStep = () => (
+
+// const PaymentStep = () => (
 //   <div>
-//     <h2>Informations</h2>
-//     <p>Formulaire de contact et adresse de livraison.</p>
+//     <h2>Paiement</h2>
+//     <p>Sélectionnez votre mode de paiement.</p>
 //   </div>
 // );
-
-// const ShippingStep = () => (
-//   <div>
-//     <h2>Expédition</h2>
-//     <p>Choisissez votre mode de livraison.</p>
-//   </div>
-// );
-
-const PaymentStep = () => (
-  <div>
-    <h2>Paiement</h2>
-    <p>Sélectionnez votre mode de paiement.</p>
-  </div>
-);
 
 const CheckoutPage = () => {
   const [currentStep, setCurrentStep] = useState<"information" | "shipping" | "payment">("information");

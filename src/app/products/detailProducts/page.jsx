@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import React, { useState } from "react"
 import styled from "styled-components"
 
@@ -246,95 +247,99 @@ const AddToCartButton = styled.button`
 `
 
 const ProductDetailPage = () => {
-  const [selectedColor, setSelectedColor] = useState("black")
-  const [selectedSize, setSelectedSize] = useState("M")
-  const [selectedImage, setSelectedImage] = useState(0)
+    const [selectedColor, setSelectedColor] = useState("black")
+    const [selectedSize, setSelectedSize] = useState("M")
+    const [selectedImage, setSelectedImage] = useState(0)
 
-  // Images de produit en utilisant picsum.photos
-  const images = [
-    "https://picsum.photos/id/1/350/400", // Image principale
-    "https://picsum.photos/id/20/350/400", // Vue arrière
-    "https://picsum.photos/id/30/350/400", // Vue latérale
-    "https://picsum.photos/id/40/350/400", // Détail
-    "https://picsum.photos/id/50/350/400", // Variante orange
-    "https://picsum.photos/id/60/350/400", // Vue détaillée
-  ]
+    // Images de produit en utilisant picsum.photos
+    const images = [
+        "https://picsum.photos/id/1/350/400", // Image principale
+        "https://picsum.photos/id/20/350/400", // Vue arrière
+        "https://picsum.photos/id/30/350/400", // Vue latérale
+        "https://picsum.photos/id/40/350/400", // Détail
+        "https://picsum.photos/id/50/350/400", // Variante orange
+        "https://picsum.photos/id/60/350/400", // Vue détaillée
+    ]
 
-  // Options de couleur
-  const colors = [
-    { name: "light-gray", code: "#e0e0e0" },
-    { name: "gray", code: "#a0a0a0" },
-    { name: "black", code: "#000000" },
-    { name: "mint", code: "#a8e6cf" },
-    { name: "white", code: "#ffffff" },
-    { name: "lavender", code: "#b5b3ff" },
-  ]
+    // Options de couleur
+    const colors = [
+        { name: "light-gray", code: "#e0e0e0" },
+        { name: "gray", code: "#a0a0a0" },
+        { name: "black", code: "#000000" },
+        { name: "mint", code: "#a8e6cf" },
+        { name: "white", code: "#ffffff" },
+        { name: "lavender", code: "#b5b3ff" },
+    ]
 
-  // Tailles disponibles
-  const sizes = ["XS", "S", "M", "L", "XL", "2X"]
+    // Tailles disponibles
+    const sizes = ["XS", "S", "M", "L", "XL", "2X"]
 
-  return (
-    <ProductContainer>
-      <ImageGalleryContainer>
-        <MainImageContainer>
-          <MainImage src={images[selectedImage]} alt="Abstract Print Shirt" />
-        </MainImageContainer>
-        
-        <ThumbnailsContainer>
-          {images.map((image, index) => (
-            <ThumbnailButton 
-              key={index} 
-              active={selectedImage === index}
-              onClick={() => setSelectedImage(index)}
-            >
-              <ThumbnailImage src={image} alt={`Thumbnail ${index + 1}`} />
-            </ThumbnailButton>
-          ))}
-        </ThumbnailsContainer>
-      </ImageGalleryContainer>
+    const handleAddToCart = () => {
+        window.location.href = '/products/checkoutPage';
+    }
 
-      <ProductInfoContainer>
-        <ProductTitle>ABSTRACT PRINT SHIRT</ProductTitle>
-        <ProductPrice>$99</ProductPrice>
-        <ProductTaxInfo>MRP incl. of all taxes</ProductTaxInfo>
-        
-        <ProductDescription>
-          Relaxed-fit shirt. Camp collar and short sleeves. Button-up front.
-        </ProductDescription>
-        
-        <SectionTitle>Color</SectionTitle>
-        <ColorOptions>
-          {colors.map((color) => (
-            <ColorOption
-              key={color.name}
-              color={color.code}
-              selected={selectedColor === color.name}
-              onClick={() => setSelectedColor(color.name)}
-            />
-          ))}
-        </ColorOptions>
-        
-        <SectionTitle>Size</SectionTitle>
-        <SizeOptions>
-          {sizes.map((size) => (
-            <SizeOption
-              key={size}
-              selected={selectedSize === size}
-              onClick={() => setSelectedSize(size)}
-            >
-              {size}
-            </SizeOption>
-          ))}
-        </SizeOptions>
-        
-        <SizeGuideLink>
-          <span>FIND YOUR SIZE</span> | <a href="#">MEASUREMENT GUIDE</a>
-        </SizeGuideLink>
-        
-        <AddToCartButton>ADD</AddToCartButton>
-      </ProductInfoContainer>
-    </ProductContainer>
-  )
+    return (
+        <ProductContainer>
+            <ImageGalleryContainer>
+                <MainImageContainer>
+                    <MainImage src={images[selectedImage]} alt="Abstract Print Shirt" />
+                </MainImageContainer>
+
+                <ThumbnailsContainer>
+                    {images.map((image, index) => (
+                        <ThumbnailButton
+                            key={index}
+                            active={selectedImage === index}
+                            onClick={() => setSelectedImage(index)}
+                        >
+                            <ThumbnailImage src={image} alt={`Thumbnail ${index + 1}`} />
+                        </ThumbnailButton>
+                    ))}
+                </ThumbnailsContainer>
+            </ImageGalleryContainer>
+
+            <ProductInfoContainer>
+                <ProductTitle>ABSTRACT PRINT SHIRT</ProductTitle>
+                <ProductPrice>$99</ProductPrice>
+                <ProductTaxInfo>MRP incl. of all taxes</ProductTaxInfo>
+
+                <ProductDescription>
+                    Relaxed-fit shirt. Camp collar and short sleeves. Button-up front.
+                </ProductDescription>
+
+                <SectionTitle>Color</SectionTitle>
+                <ColorOptions>
+                    {colors.map((color) => (
+                        <ColorOption
+                            key={color.name}
+                            color={color.code}
+                            selected={selectedColor === color.name}
+                            onClick={() => setSelectedColor(color.name)}
+                        />
+                    ))}
+                </ColorOptions>
+
+                <SectionTitle>Size</SectionTitle>
+                <SizeOptions>
+                    {sizes.map((size) => (
+                        <SizeOption
+                            key={size}
+                            selected={selectedSize === size}
+                            onClick={() => setSelectedSize(size)}
+                        >
+                            {size}
+                        </SizeOption>
+                    ))}
+                </SizeOptions>
+
+                <SizeGuideLink>
+                    <span>FIND YOUR SIZE</span> | <a href="#">MEASUREMENT GUIDE</a>
+                </SizeGuideLink>
+
+                <AddToCartButton onClick={handleAddToCart}>  ADD </AddToCartButton>
+            </ProductInfoContainer>
+        </ProductContainer>
+    )
 }
 
 export default ProductDetailPage
