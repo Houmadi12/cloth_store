@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import FilterProducts from "@/components/FilterProducts";
 import ProductCard from "@/components/ProductCard";
-import { products3 } from "@/data/Products";
+import { products3, Product } from "@/data/Products";
 import Link from "next/link";
 
 // Styled Components
@@ -44,7 +44,7 @@ const Layout = styled.div`
 
 const Sidebar = styled.div`
   width: 100%;
-  dislpay: flex;
+  display: flex; // ✅ Correction ici (dislpay → display)
   padding-top: 130px;
 
   @media (min-width: 768px) {
@@ -139,7 +139,7 @@ const CategoryButton = styled.button`
   }
 `;
 
-const ListProduicts = styled.div`
+const ListProducts = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
@@ -155,7 +155,6 @@ const ListProduicts = styled.div`
 
 const Header = styled.div``;
 
-// Nouveau composant pour encapsuler ProductCard avec lien
 const ProductCardLink = styled.div`
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -165,7 +164,7 @@ const ProductCardLink = styled.div`
   }
 `;
 
-const ProductsFilter = () => {
+const ProductsFilter: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const categories = [
@@ -184,29 +183,28 @@ const ProductsFilter = () => {
   return (
     <Container>
       <Layout>
-        {/* Sidebar Filters */}
         <Sidebar>
           <SidebarTitle>Filters</SidebarTitle>
           <FilterProducts />
         </Sidebar>
 
-        {/* Main Content */}
         <MainContent>
           <Header>
             <Breadcrumb>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              <Link href="/" passHref legacyBehavior>
+                <BreadcrumbLink>Home</BreadcrumbLink>
+              </Link>
               <BreadcrumbSeparator>/</BreadcrumbSeparator>
               <span>Products</span>
             </Breadcrumb>
             <Title>PRODUCTS</Title>
 
-            {/* Search Bar */}
             <SearchContainer>
               <SearchInput
                 type="text"
                 placeholder="Search"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)} // ✅ Correction TypeScript
               />
               <SearchIconContainer>
                 <svg
@@ -225,36 +223,29 @@ const ProductsFilter = () => {
                 </svg>
               </SearchIconContainer>
 
-              {/* Category Filters */}
               <CategoryGrid>
                 {categories.map((category) => (
-                  <CategoryButton key={category.id}>
-                    {category.label}
-                  </CategoryButton>
+                  <CategoryButton key={category.id}>{category.label}</CategoryButton>
                 ))}
               </CategoryGrid>
             </SearchContainer>
           </Header>
 
-          <ListProduicts>
-            {products3.map((product, index) => (
-              <Link 
-                href={`/products/detailProducts`} 
-                key={index}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
+          <ListProducts>
+            {products3.map((product: Product, index: number) => (
+              <Link href={`/products/detailProducts`} key={index} passHref legacyBehavior>
                 <ProductCardLink>
                   <ProductCard
-                    imageSrc={product.image}
+                    imageSrc={product.image} // ✅ Correspond bien aux props attendues
                     category={product.category}
-                    colorCount={product.colors}
+                    colorCount={product.colors} 
                     title={product.name}
                     price={product.price}
                   />
                 </ProductCardLink>
               </Link>
             ))}
-          </ListProduicts>
+          </ListProducts>
         </MainContent>
       </Layout>
     </Container>
