@@ -36,7 +36,8 @@ export default function Inscription() {
     window.history.back();
   };
 
-  const handleChange = (e) => {
+  // 🔹 Ajout du type pour l'événement de changement
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUser((prev) => ({
       ...prev,
@@ -44,7 +45,7 @@ export default function Inscription() {
     }));
 
     // Effacer l'erreur du champ lorsqu'il est modifié
-    if (errors[name]) {
+    if (errors[name as keyof typeof errors]) {
       setErrors((prev) => ({
         ...prev,
         [name]: "",
@@ -93,7 +94,8 @@ export default function Inscription() {
     return isValid;
   };
 
-  const handleSubmit = async (e) => {
+  // 🔹 Ajout du type pour l'événement de soumission du formulaire
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSuccess("");
 
@@ -111,7 +113,7 @@ export default function Inscription() {
         },
         body: JSON.stringify({
           email: user.email,
-          motDePasse: user.motDePasse
+          motDePasse: user.motDePasse,
         }),
       });
 
@@ -125,18 +127,21 @@ export default function Inscription() {
       setUser({
         email: "",
         motDePasse: "",
-        confirmPassword: ""
+        confirmPassword: "",
       });
       setErrors({
         email: "",
         motDePasse: "",
         confirmPassword: "",
-        general: ""
+        general: "",
       });
     } catch (error) {
       setErrors((prev) => ({
         ...prev,
-        general: error.message || "Une erreur est survenue lors de l'inscription"
+        general:
+          error instanceof Error
+            ? error.message
+            : "Une erreur est survenue lors de l'inscription",
       }));
     } finally {
       setLoading(false);
@@ -162,10 +167,14 @@ export default function Inscription() {
 
       <Container>
         <Title>Inscription</Title>
-        
-        {errors.general && <ErrorMessage style={{ textAlign: "center", marginBottom: "15px" }}>{errors.general}</ErrorMessage>}
+
+        {errors.general && (
+          <ErrorMessage style={{ textAlign: "center", marginBottom: "15px" }}>
+            {errors.general}
+          </ErrorMessage>
+        )}
         {success && <SuccessMessage>{success}</SuccessMessage>}
-        
+
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Label htmlFor="email">Email</Label>
@@ -210,7 +219,9 @@ export default function Inscription() {
                 onChange={handleChange}
               />
             )}
-            {errors.motDePasse && <ErrorMessage>{errors.motDePasse}</ErrorMessage>}
+            {errors.motDePasse && (
+              <ErrorMessage>{errors.motDePasse}</ErrorMessage>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -232,7 +243,9 @@ export default function Inscription() {
                 onChange={handleChange}
               />
             )}
-            {errors.confirmPassword && <ErrorMessage>{errors.confirmPassword}</ErrorMessage>}
+            {errors.confirmPassword && (
+              <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
+            )}
           </FormGroup>
 
           <ButtonContainer>
