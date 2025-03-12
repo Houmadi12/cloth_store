@@ -95,7 +95,7 @@ const Navbar: React.FC<NavbarProps> = ({ homePath = "/" }) => {
         </RightSection>
       </NavContainer>
 
-      <MobileMenu $isOpen={isMobileMenuOpen}>
+      <MobileMenu isOpen={isMobileMenuOpen}>
         <MobileNavLinks>
           <NavLink href="#" onClick={handleHomeClick}>
             Home
