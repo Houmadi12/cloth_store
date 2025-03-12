@@ -115,6 +115,14 @@ const ProductPrice = styled.div`
   font-size: 15px; 
 `;
 
+interface ProductCardProps {
+  imageSrc: string;
+  category: string;
+  colorCount?: number;
+  title: string;
+  price: number;
+}
+
 const ProductCard = () => {
   const [quantity, setQuantity] = useState(1);
 
