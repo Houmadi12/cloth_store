@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/styles/GlobalStyles.js", "src/styles/NavbarStyle.js", "src/data/Products.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/styles/GlobalStyles.js", "src/styles/NavbarStyle.js", "src/data/Productsa.js"],
   "exclude": ["node_modules"]
 }

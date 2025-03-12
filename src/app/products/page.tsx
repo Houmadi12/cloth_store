@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import FilterProducts from "@/components/FilterProducts";
 import ProductCard from "@/components/ProductCard";
-import { products3 } from "@/data/Products";
+import { products3, Product } from "@/data/Products";
 import Link from "next/link";
+
 
 // Styled Components
 const Container = styled.div`

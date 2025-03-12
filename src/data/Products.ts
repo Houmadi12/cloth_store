@@ -1,3 +1,11 @@
+export interface Product {
+  image: string;
+  category: string;
+  colors: number;
+  name: string;
+  price: number;
+}
+
 // Sample product data
 export const products = [
     {
