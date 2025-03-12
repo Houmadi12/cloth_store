@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 import {
   Container,
@@ -25,7 +25,7 @@ export default function Connexion() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -42,7 +42,7 @@ export default function Connexion() {
       setTimeout(() => {
         window.location.href = "/"; // Rediriger après connexion
       }, 1500);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.response?.data?.message || "Erreur de connexion");
     } finally {
       setLoading(false);
@@ -72,7 +72,6 @@ export default function Connexion() {
 
       <Container>
         <Title>Connexion</Title>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
         {/* {success && <SuccessMessage>{success}</SuccessMessage>} */}
 
         <Form onSubmit={handleSubmit}>
@@ -82,7 +81,7 @@ export default function Connexion() {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               placeholder="votre@email.com"
               as={error ? ErrorInput : Input}
             />
@@ -94,7 +93,7 @@ export default function Connexion() {
               type="password"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
               as={error ? ErrorInput : Input}
             />
           </FormGroup>
@@ -102,7 +101,7 @@ export default function Connexion() {
           <ForgotPassword href="/reset-password">
             Mot de passe oublié ?
           </ForgotPassword>
-
+           {error && <ErrorMessage>{error}</ErrorMessage>}
           <ButtonContainer>
             <Button type="submit" disabled={loading}>
               {loading ? "Connexion..." : "Se connecter"}
