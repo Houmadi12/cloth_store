@@ -55,10 +55,10 @@ const Navbar: React.FC<NavbarProps> = ({ homePath = "/" }) => {
           </IconButtonMenu>
 
           <NavLinks>
-            <NavLink href="#" onClick={handleHomeClick}>
+            <NavLink href="/" onClick={handleHomeClick}>
               Home
             </NavLink>
-            <NavLink href="#">Collections</NavLink>
+            <NavLink href="/products">Collections</NavLink>
             <NavLink href="#">New</NavLink>
           </NavLinks>
         </LeftSection>

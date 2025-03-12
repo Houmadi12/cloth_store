@@ -5,6 +5,7 @@ import styled from "styled-components";
 import FilterProducts from "@/components/FilterProducts";
 import ProductCard from "@/components/ProductCard";
 import { products3 } from "@/data/Products";
+import Link from "next/link";
 
 // Styled Components
 const Container = styled.div`
@@ -102,7 +103,8 @@ const SearchIconContainer = styled.div`
   color: #666;
 
   @media (max-width: 768px) {
-    top:top: 50%;
+    top: 50%;
+    transform: translateY(-50%);
   }
 `;
 
@@ -132,7 +134,7 @@ const CategoryButton = styled.button`
     background-color: #f5f5f5;
   }
 
-  @media (max-width: 78px) {
+  @media (max-width: 768px) {
     font-size: 10px;
   }
 `;
@@ -152,6 +154,16 @@ const ListProduicts = styled.div`
 `;
 
 const Header = styled.div``;
+
+// Nouveau composant pour encapsuler ProductCard avec lien
+const ProductCardLink = styled.div`
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+`;
 
 const ProductsFilter = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -226,14 +238,21 @@ const ProductsFilter = () => {
 
           <ListProduicts>
             {products3.map((product, index) => (
-              <ProductCard
+              <Link 
+                href={`/products/detailProducts`} 
                 key={index}
-                imageSrc={product.image}
-                category={product.category}
-                colorCount={product.colors}
-                title={product.name}
-                price={product.price}
-              />
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <ProductCardLink>
+                  <ProductCard
+                    imageSrc={product.image}
+                    category={product.category}
+                    colorCount={product.colors}
+                    title={product.name}
+                    price={product.price}
+                  />
+                </ProductCardLink>
+              </Link>
             ))}
           </ListProduicts>
         </MainContent>
