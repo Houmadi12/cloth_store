@@ -1,7 +1,19 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa"
+
+// Définition de l'interface Product
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  size?: string;
+  color?: string;
+  image?: string;
+}
 
 const ProductsContainer = styled.div`
   background-color: white;
@@ -85,8 +97,32 @@ const LoadingState = styled.div`
   color: #718096;
 `
 
-// Changement du nom du composant pour correspondre au fichier page.tsx
-export default function AdminPage({ products = [] }) {
+export default function AdminPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fonction pour charger les produits
+    async function loadProducts() {
+      try {
+        // Remplacez par votre API endpoint
+        const response = await fetch('/api/products');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Erreur lors du chargement des produits:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProducts();
+  }, []);
+
+  if (loading) {
+    return <LoadingState>Chargement des produits...</LoadingState>;
+  }
+
   return (
     <ProductsContainer>
       <ProductsHeader>
