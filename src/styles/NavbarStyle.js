@@ -195,8 +195,22 @@ export const CartBadge = styled.span`
   padding: 2px 6px;
 `;
 
-import styled from "styled-components";
-
+export const MobileMenu = styled.div`
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: ${({ $isOpen }) => $isOpen ? '0' : '-100%'};
+    width: 70%;
+    height: 100%;
+    background-color: white;
+    z-index: 1001; /* Higher than the fixed navbar */
+    transition: left 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  }
+`;
 
 export const MobileNavLinks = styled.div`
   display: none;
