@@ -61,7 +61,7 @@ const ActionButton = styled.button`
   color: #4a5568;
   margin-right: 8px;
   transition: color 0.3s;
-
+  
   &:hover {
     color: #3182ce;
   }
@@ -85,57 +85,60 @@ const LoadingState = styled.div`
   color: #718096;
 `
 
-const ProductsList = ({ products = [] }) => {
+// Changement du nom du composant pour correspondre au fichier page.tsx
+export default function AdminPage({ products = [] }) {
   return (
     <ProductsContainer>
       <ProductsHeader>
-        <Title>Liste des produits</Title>
+        <Title>Liste des Produits</Title>
       </ProductsHeader>
-
-      <Table>
-        <thead>
-          <tr>
-            <Th>Image</Th>
-            <Th>Nom</Th>
-            <Th>Prix</Th>
-            <Th>Catégorie</Th>
-            <Th>Taille</Th>
-            <Th>Couleur</Th>
-            <Th>Actions</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product._id}>
-              <Td>
-                {product.image ? (
-                  <ProductImage src={product.image} alt={product.name} />
-                ) : (
-                  <ProductImage src="/placeholder.svg?height=50&width=50" alt="Placeholder" />
-                )}
-              </Td>
-              <Td>{product.name}</Td>
-              <Td>{product.price.toLocaleString()} €</Td>
-              <Td>{product.category}</Td>
-              <Td>{product.size || "-"}</Td>
-              <Td>{product.color || "-"}</Td>
-              <Td>
-                <ActionButton title="Voir">
-                  <FaEye />
-                </ActionButton>
-                <ActionButton title="Modifier">
-                  <FaEdit />
-                </ActionButton>
-                <DeleteButton title="Supprimer">
-                  <FaTrash />
-                </DeleteButton>
-              </Td>
+      
+      {products.length === 0 ? (
+        <EmptyState>Aucun produit trouvé.</EmptyState>
+      ) : (
+        <Table>
+          <thead>
+            <tr>
+              <Th>Image</Th>
+              <Th>Nom</Th>
+              <Th>Prix</Th>
+              <Th>Catégorie</Th>
+              <Th>Taille</Th>
+              <Th>Couleur</Th>
+              <Th>Actions</Th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.id}>
+                <Td>
+                  {product.image ? (
+                    <ProductImage src={product.image} alt={product.name} />
+                  ) : (
+                    "Pas d'image"
+                  )}
+                </Td>
+                <Td>{product.name}</Td>
+                <Td>{product.price.toLocaleString()} €</Td>
+                <Td>{product.category}</Td>
+                <Td>{product.size || "-"}</Td>
+                <Td>{product.color || "-"}</Td>
+                <Td>
+                  <ActionButton>
+                    <FaEye />
+                  </ActionButton>
+                  <ActionButton>
+                    <FaEdit />
+                  </ActionButton>
+                  <DeleteButton>
+                    <FaTrash />
+                  </DeleteButton>
+                </Td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </ProductsContainer>
-  )
+  );
 }
-
-export default ProductsList
