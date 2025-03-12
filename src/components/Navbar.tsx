@@ -24,7 +24,7 @@ import {
   IconButtonFavori,
   MobileMenu,
   MobileNavLinks,
-} from "../styles/NavbarStyle";
+} from "@/styles/NavbarStyle.tsx";
 
 interface NavbarProps {
   homePath?: string;
@@ -95,7 +95,7 @@ const Navbar: React.FC<NavbarProps> = ({ homePath = "/" }) => {
         </RightSection>
       </NavContainer>
 
-      <MobileMenu isOpen={isMobileMenuOpen}>
+      <MobileMenu $isOpen={isMobileMenuOpen}>
         <MobileNavLinks>
           <NavLink href="#" onClick={handleHomeClick}>
             Home

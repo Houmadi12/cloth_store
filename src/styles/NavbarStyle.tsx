@@ -195,7 +195,7 @@ export const CartBadge = styled.span`
   padding: 2px 6px;
 `;
 
-export const MobileMenu = styled.div`
+export const MobileMenu = styled.div<{ $isOpen?: boolean }>`
   display: none;
   
   @media (max-width: 768px) {
