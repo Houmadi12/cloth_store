@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { IoClose } from 'react-icons/io5';
 import { IoMdAdd, IoMdRemove } from 'react-icons/io';
 import { BiRefresh } from 'react-icons/bi';
-import { AiOutlineHeart } from 'react-icons/ai';
 
 // Styled Components
 const CardContainer = styled.div`
@@ -117,39 +116,35 @@ const ProductPrice = styled.div`
 
 export interface ProductCardProps {
   imageSrc: string;
-  category: string;
-  colorCount: number;
+  category?: string;
+  colorCount?: number;
   title: string;
   price: number;
+  quantity: number;
   backgroundColor?: string; 
+  onUpdateQuantity: (delta: number) => void;
+  onRemove: () => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ 
   imageSrc, 
-  category, 
+  category = "Produit", 
   colorCount, 
   title, 
   price,
+  quantity,
+  onUpdateQuantity,
+  onRemove,
   backgroundColor = 'black'
 }) => {
-  const [quantity, setQuantity] = useState(1);
-
-  const increaseQuantity = () => {
-    setQuantity(prev => prev + 1);
-  };
-
-  const decreaseQuantity = () => {
-    setQuantity(prev => prev > 1 ? prev - 1 : 1);
-  };
-
   return (
     <CardContainer>
       <ImageContainer>
         <ProductImage 
           src={imageSrc}
-          alt="image"
+          alt={title}
         />
-        <CloseButton>
+        <CloseButton onClick={onRemove}>
           <IoClose size={18} color="#333" />
         </CloseButton>
       </ImageContainer>
@@ -157,11 +152,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <SideControls>
         <SizeIndicator>L</SizeIndicator>
         <ColorBox $backgroundColor={backgroundColor} />
-        <ControlButton onClick={increaseQuantity}>
+        <ControlButton onClick={() => onUpdateQuantity(1)}>
           <IoMdAdd size={14} />
         </ControlButton>
         <QuantityDisplay>{quantity}</QuantityDisplay>
-        <ControlButton onClick={decreaseQuantity}>
+        <ControlButton onClick={() => onUpdateQuantity(-1)}>
           <IoMdRemove size={14} />
         </ControlButton>
         <ControlButton style={{ marginTop: '3px' }}>
@@ -173,7 +168,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <ProductType>{category}</ProductType>
         <DetailsRow>
           <ProductName>{title}</ProductName>
-          <ProductPrice>{price}</ProductPrice>
+          <ProductPrice>{price} €</ProductPrice>
         </DetailsRow>
       </ProductDetails>
     </CardContainer>

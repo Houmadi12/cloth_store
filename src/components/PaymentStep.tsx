@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
+
+type PaymentMethodId = "orange-money" | "wave";
 
 // Styled components
 const Container = styled.div`
@@ -15,22 +17,26 @@ const CardsContainer = styled.div`
   gap: 16px;
 `;
 
-const Card = styled.div`
+interface CardProps {
+  $isSelected: boolean;
+}
+
+const Card = styled.div<CardProps>`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 16px;
-  border: 2px solid ${props => props.isSelected ? '#3b82f6' : '#e5e7eb'};
+  border: 2px solid ${(props) => (props.$isSelected ? "#3b82f6" : "#e5e7eb")};
   border-radius: 8px;
   width: 160px;
   height: 128px;
   cursor: pointer;
   transition: all 0.2s ease;
-  background-color: ${props => props.isSelected ? '#eff6ff' : '#ffffff'};
+  background-color: ${(props) => (props.$isSelected ? "#eff6ff" : "#ffffff")};
 
   &:hover {
-    border-color: ${props => props.isSelected ? '#3b82f6' : '#d1d5db'};
+    border-color: ${(props) => (props.$isSelected ? "#3b82f6" : "#d1d5db")};
   }
 `;
 
@@ -48,18 +54,26 @@ const RadioInput = styled.input`
   cursor: pointer;
 `;
 
-const RadioLabel = styled.label`
+interface RadioLabelProps {
+  $checked: boolean;
+}
+
+const RadioLabel = styled.label<RadioLabelProps>`
   display: block;
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 2px solid ${props => props.checked ? '#3b82f6' : '#d1d5db'};
+  border: 2px solid ${(props) => (props.$checked ? "#3b82f6" : "#d1d5db")};
   cursor: pointer;
   transition: border-color 0.2s ease;
   position: relative;
 `;
 
-const RadioIndicator = styled.span`
+interface RadioIndicatorProps {
+  $checked: boolean;
+}
+
+const RadioIndicator = styled.span<RadioIndicatorProps>`
   position: absolute;
   inset: 0;
   display: flex;
@@ -67,12 +81,12 @@ const RadioIndicator = styled.span`
   justify-content: center;
 
   &::after {
-    content: '';
+    content: "";
     width: 12px;
     height: 12px;
     border-radius: 50%;
     background-color: #3b82f6;
-    display: ${props => props.checked ? 'block' : 'none'};
+    display: ${(props) => (props.$checked ? "block" : "none")};
   }
 `;
 
@@ -110,7 +124,7 @@ const ValidationButton = styled.button`
   min-width: 200px;
 
   &:hover {
-    background-color:rgb(63, 63, 63);
+    background-color: rgb(63, 63, 63);
   }
 
   &:active {
@@ -124,38 +138,48 @@ const ValidationButton = styled.button`
 `;
 
 const PaymentMethodSelector = () => {
-  const [selectedMethod, setSelectedMethod] = useState('orange-money');
+  const [selectedMethod, setSelectedMethod] =
+    useState<PaymentMethodId>("orange-money");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Images URLs - remplacez ces URL par les chemins d'accès réels aux images téléchargées
   const orangeMoneyImageUrl = "https://chemin/vers/image-2.png"; // Remplacer par le chemin réel de l'image des flèches
   const waveImageUrl = "https://chemin/vers/image-1.png"; // Remplacer par le chemin réel de l'image du pingouin
 
-  const paymentMethods = [
+  interface PaymentMethod {
+    id: PaymentMethodId;
+    name: string;
+    logo: string;
+  }
+
+  const paymentMethods: PaymentMethod[] = [
     {
-      id: 'orange-money',
-      name: 'Orange Money',
-      logo: "/images/logo1.png"
+      id: "orange-money",
+      name: "Orange Money",
+      logo: "/images/logo1.png",
     },
     {
-      id: 'wave',
-      name: 'Wave',
-      logo: "/images/logo2.png"
-    }
+      id: "wave",
+      name: "Wave",
+      logo: "/images/logo2.png",
+    },
   ];
 
-  const handleSelect = (methodId) => {
+  const handleSelect = (methodId: PaymentMethodId) => {
     setSelectedMethod(methodId);
   };
 
-  const handleRadioChange = (e, methodId) => {
+  const handleRadioChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    methodId: PaymentMethodId
+  ) => {
     e.stopPropagation();
     setSelectedMethod(methodId);
   };
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    
+
     // Simuler une requête de paiement
     setTimeout(() => {
       console.log(`Paiement validé avec la méthode: ${selectedMethod}`);
@@ -168,9 +192,9 @@ const PaymentMethodSelector = () => {
     <Container>
       <CardsContainer>
         {paymentMethods.map((method) => (
-          <Card 
-            key={method.id} 
-            isSelected={selectedMethod === method.id}
+          <Card
+            key={method.id}
+            $isSelected={selectedMethod === method.id}
             onClick={() => handleSelect(method.id)}
           >
             <RadioContainer>
@@ -181,25 +205,25 @@ const PaymentMethodSelector = () => {
                 checked={selectedMethod === method.id}
                 onChange={(e) => handleRadioChange(e, method.id)}
               />
-              <RadioLabel htmlFor={method.id} checked={selectedMethod === method.id}>
-                <RadioIndicator checked={selectedMethod === method.id} />
+              <RadioLabel
+                htmlFor={method.id}
+                $checked={selectedMethod === method.id}
+              >
+                <RadioIndicator $checked={selectedMethod === method.id} />
               </RadioLabel>
             </RadioContainer>
-            
+
             <LogoContainer>
               <LogoImage src={method.logo} alt={`${method.name} logo`} />
             </LogoContainer>
-            
+
             <Name>{method.name}</Name>
           </Card>
         ))}
       </CardsContainer>
-      
-      <ValidationButton 
-        onClick={handleSubmit} 
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? 'Traitement en cours...' : 'Valider le paiement'}
+
+      <ValidationButton onClick={handleSubmit} disabled={isSubmitting}>
+        {isSubmitting ? "Traitement en cours..." : "Valider le paiement"}
       </ValidationButton>
     </Container>
   );

@@ -4,6 +4,8 @@ import React from "react";
 import styled from "styled-components";
 import { FiArrowLeft, FiChevronDown } from "react-icons/fi";
 
+type CheckoutStep = "information" | "shipping" | "payment";
+
 // Styled Components
 const CheckoutContainer = styled.div`
   max-width: 1200px;
@@ -35,23 +37,27 @@ const StepsContainer = styled.div`
   border-bottom: 1px solid #e0e0e0;
 `;
 
-const StepButton = styled.button`
+interface StepButtonProps {
+  $active: boolean;
+}
+
+const StepButton = styled.button<StepButtonProps>`
   background: none;
   border: none;
   font-size: 14px;
   padding: 10px 20px;
   cursor: pointer;
   position: relative;
-  font-weight: ${(props) => (props.active ? "bold" : "normal")};
-  
+  font-weight: ${(props) => (props.$active ? "bold" : "normal")};
+
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -1px;
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: ${(props) => (props.active ? "black" : "transparent")};
+    background-color: ${(props) => (props.$active ? "black" : "transparent")};
   }
 `;
 
@@ -59,7 +65,7 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  
+
   @media (min-width: 768px) {
     flex-direction: row;
   }
@@ -81,7 +87,7 @@ const FormGrid = styled.div`
   grid-template-columns: 1fr;
   gap: 15px;
   margin-bottom: 30px;
-  
+
   &.two-columns {
     @media (min-width: 480px) {
       grid-template-columns: 1fr 1fr;
@@ -94,7 +100,7 @@ const InputField = styled.input`
   padding: 12px;
   border: 1px solid #e0e0e0;
   font-size: 14px;
-  
+
   &:focus {
     outline: none;
     border-color: #a0a0a0;
@@ -104,7 +110,7 @@ const InputField = styled.input`
 const SelectField = styled.div`
   position: relative;
   width: 100%;
-  
+
   select {
     width: 100%;
     padding: 12px;
@@ -112,7 +118,7 @@ const SelectField = styled.div`
     font-size: 14px;
     appearance: none;
     background-color: white;
-    
+
     &:focus {
       outline: none;
       border-color: #a0a0a0;
@@ -131,7 +137,7 @@ const ActionButton = styled.button`
   cursor: pointer;
   transition: background-color 0.2s;
   margin-left: auto;
-  
+
   &:hover {
     background-color: #e0e0e0;
   }
@@ -141,7 +147,7 @@ const OrderSummary = styled.div`
   background-color: #fafafa;
   padding: 20px;
   width: 100%;
-  
+
   @media (min-width: 768px) {
     width: 350px;
   }
@@ -174,7 +180,7 @@ const ItemImage = styled.div`
   width: 70px;
   height: 70px;
   margin-right: 15px;
-  
+
   img {
     width: 100%;
     height: 100%;
@@ -233,7 +239,7 @@ const SummaryRow = styled.div`
   justify-content: space-between;
   padding: 10px 0;
   font-size: 14px;
-  
+
   &.total {
     font-weight: bold;
     margin-top: 10px;
@@ -248,108 +254,132 @@ const ShippingInfo = styled.div`
   font-style: italic;
 `;
 
-export default function InformationStep ({setCurrentStep}){
-    return (
-        <CheckoutContainer>       
-        <Layout>
-          <FormSection>
-            <SectionTitle>Contact Info</SectionTitle>
-            <FormGrid>
-              <InputField type="email" placeholder="Email" />
-              <InputField type="tel" placeholder="Phone" />
-            </FormGrid>
-            
-            <SectionTitle>Shipping Address</SectionTitle>
-            <FormGrid className="two-columns">
-              <InputField type="text" placeholder="First Name" />
-              <InputField type="text" placeholder="Last Name" />
-            </FormGrid>
-            
-            <FormGrid>
-              <SelectField>
-                <InputField as="select" placeholder="Country">
-                  <option value="">Country</option>
-                  <option value="us">United States</option>
-                  <option value="ca">Canada</option>
-                  <option value="uk">United Kingdom</option>
-                </InputField>
-                <FiChevronDown size={16} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-              </SelectField>
-            </FormGrid>
-            
-            <FormGrid>
-              <InputField type="text" placeholder="State / Region" />
-            </FormGrid>
-            
-            <FormGrid>
-              <InputField type="text" placeholder="Address" />
-            </FormGrid>
-            
-            <FormGrid className="two-columns">
-              <InputField type="text" placeholder="City" />
-              <InputField type="text" placeholder="Postal Code" />
-            </FormGrid>
-            
-            <ActionButton onClick={() => setCurrentStep("shipping")}>
-              Shipping
-              <FiArrowLeft size={16} style={{ transform: 'rotate(180deg)', marginLeft: '10px' }} />
-            </ActionButton>
-          </FormSection>
-          
-          <OrderSummary>
-            <OrderTitle>
-              YOUR ORDER
-              <ItemCount>(2)</ItemCount>
-            </OrderTitle>
-            
-            <OrderItemsList>
-              <OrderItem>
-                <ItemImage>
-                  <img src="https://picsum.photos/id/1/200/200" alt="Basic Heavy T-Shirt" />
-                </ItemImage>
-                <ItemDetails>
-                  <ItemTitle>Basic Heavy T-Shirt</ItemTitle>
-                  <ItemColor>Black/L</ItemColor>
-                  <ItemQuantity>(1)</ItemQuantity>
-                </ItemDetails>
-                <ItemActions>
-                  <ItemPrice>$ 99</ItemPrice>
-                  <ChangeButton>Change</ChangeButton>
-                </ItemActions>
-              </OrderItem>
-              
-              <OrderItem>
-                <ItemImage>
-                  <img src="https://picsum.photos/id/2/200/200" alt="Basic Fit T-Shirt" />
-                </ItemImage>
-                <ItemDetails>
-                  <ItemTitle>Basic Fit T-Shirt</ItemTitle>
-                  <ItemColor>Black/L</ItemColor>
-                  <ItemQuantity>(1)</ItemQuantity>
-                </ItemDetails>
-                <ItemActions>
-                  <ItemPrice>$ 99</ItemPrice>
-                  <ChangeButton>Change</ChangeButton>
-                </ItemActions>
-              </OrderItem>
-            </OrderItemsList>
-            
-            <OrderSummaryTable>
-              <SummaryRow>
-                <span>Subtotal</span>
-                <span>$180.00</span>
-              </SummaryRow>
-              <SummaryRow>
-                <span>Shipping</span>
-                <ShippingInfo>Calculated at next step</ShippingInfo>
-              </SummaryRow>
-              <SummaryRow className="total">
-                <span>Total</span>
-                <span>$180.00</span>
-              </SummaryRow>
-            </OrderSummaryTable>
-          </OrderSummary>
-        </Layout>
-      </CheckoutContainer>
-    )
+interface InformationStepProps {
+  setCurrentStep: (step: CheckoutStep) => void;
+}
+
+export default function InformationStep({
+  setCurrentStep,
+}: InformationStepProps) {
+  return (
+    <CheckoutContainer>
+      <Layout>
+        <FormSection>
+          <SectionTitle>Contact Info</SectionTitle>
+          <FormGrid>
+            <InputField type="email" placeholder="Email" />
+            <InputField type="tel" placeholder="Phone" />
+          </FormGrid>
+
+          <SectionTitle>Shipping Address</SectionTitle>
+          <FormGrid className="two-columns">
+            <InputField type="text" placeholder="First Name" />
+            <InputField type="text" placeholder="Last Name" />
+          </FormGrid>
+
+          <FormGrid>
+            <SelectField>
+              <InputField as="select" placeholder="Country">
+                <option value="">Country</option>
+                <option value="us">United States</option>
+                <option value="ca">Canada</option>
+                <option value="uk">United Kingdom</option>
+              </InputField>
+              <FiChevronDown
+                size={16}
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  pointerEvents: "none",
+                }}
+              />
+            </SelectField>
+          </FormGrid>
+
+          <FormGrid>
+            <InputField type="text" placeholder="State / Region" />
+          </FormGrid>
+
+          <FormGrid>
+            <InputField type="text" placeholder="Address" />
+          </FormGrid>
+
+          <FormGrid className="two-columns">
+            <InputField type="text" placeholder="City" />
+            <InputField type="text" placeholder="Postal Code" />
+          </FormGrid>
+
+          <ActionButton onClick={() => setCurrentStep("shipping")}>
+            Shipping
+            <FiArrowLeft
+              size={16}
+              style={{ transform: "rotate(180deg)", marginLeft: "10px" }}
+            />
+          </ActionButton>
+        </FormSection>
+
+        <OrderSummary>
+          <OrderTitle>
+            YOUR ORDER
+            <ItemCount>(2)</ItemCount>
+          </OrderTitle>
+
+          <OrderItemsList>
+            <OrderItem>
+              <ItemImage>
+                <img
+                  src="https://picsum.photos/id/1/200/200"
+                  alt="Basic Heavy T-Shirt"
+                />
+              </ItemImage>
+              <ItemDetails>
+                <ItemTitle>Basic Heavy T-Shirt</ItemTitle>
+                <ItemColor>Black/L</ItemColor>
+                <ItemQuantity>(1)</ItemQuantity>
+              </ItemDetails>
+              <ItemActions>
+                <ItemPrice>$ 99</ItemPrice>
+                <ChangeButton>Change</ChangeButton>
+              </ItemActions>
+            </OrderItem>
+
+            <OrderItem>
+              <ItemImage>
+                <img
+                  src="https://picsum.photos/id/2/200/200"
+                  alt="Basic Fit T-Shirt"
+                />
+              </ItemImage>
+              <ItemDetails>
+                <ItemTitle>Basic Fit T-Shirt</ItemTitle>
+                <ItemColor>Black/L</ItemColor>
+                <ItemQuantity>(1)</ItemQuantity>
+              </ItemDetails>
+              <ItemActions>
+                <ItemPrice>$ 99</ItemPrice>
+                <ChangeButton>Change</ChangeButton>
+              </ItemActions>
+            </OrderItem>
+          </OrderItemsList>
+
+          <OrderSummaryTable>
+            <SummaryRow>
+              <span>Subtotal</span>
+              <span>$180.00</span>
+            </SummaryRow>
+            <SummaryRow>
+              <span>Shipping</span>
+              <ShippingInfo>Calculated at next step</ShippingInfo>
+            </SummaryRow>
+            <SummaryRow className="total">
+              <span>Total</span>
+              <span>$180.00</span>
+            </SummaryRow>
+          </OrderSummaryTable>
+        </OrderSummary>
+      </Layout>
+    </CheckoutContainer>
+  );
 }

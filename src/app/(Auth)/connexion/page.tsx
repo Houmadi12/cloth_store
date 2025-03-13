@@ -40,7 +40,7 @@ export default function Connexion() {
       setSuccess("Connexion réussie ! Redirection...");
       localStorage.setItem("token", response.data.token);
       setTimeout(() => {
-        window.location.href = "/"; // Rediriger après connexion
+        window.location.href = "/products"; // Rediriger après connexion
       }, 1500);
     } catch (err: any) {
       setError(err.response?.data?.message || "Erreur de connexion");
@@ -109,7 +109,7 @@ export default function Connexion() {
           </ButtonContainer>
           <RegisterLink>
             Vous n'avez pas de compte ?{" "}
-            <StyledLink href="/inscription">S'inscrire</StyledLink>
+            <StyledLink href="#">S'inscrire</StyledLink>
           </RegisterLink>
         </Form>
       </Container>

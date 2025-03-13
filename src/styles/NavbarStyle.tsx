@@ -241,11 +241,15 @@ export const MobileNavLinks = styled.div`
   }
 `;
 
-// Add this component to create proper spacing below the fixed navbar
-export const NavbarSpacer = styled.div`
-  height: ${props => props.height || '120px'}; /* Should match navbar height + padding */
+interface NavbarSpacerProps {
+  $height?: string;
+  $mobileHeight?: string;
+}
+
+export const NavbarSpacer = styled.div<NavbarSpacerProps>`
+  height: ${props => props.$height || '120px'}; /* Should match navbar height + padding */
   
   @media (max-width: 400px) {
-    height: ${props => props.mobileHeight || '80px'};
+    height: ${props => props.$mobileHeight || '80px'};
   }
 `;

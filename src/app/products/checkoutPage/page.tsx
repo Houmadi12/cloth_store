@@ -5,7 +5,9 @@ import styled from "styled-components";
 import { FiArrowLeft, FiChevronDown } from "react-icons/fi";
 import InformationStep from "@/components/InformationStep";
 import ShippingStep from "@/components/ShippingStep";
-import PaymentStep from "@/components/PaymentStep"
+import PaymentStep from "@/components/PaymentStep";
+
+type CheckoutStep = "information" | "shipping" | "payment";
 
 // Styled Components
 const CheckoutContainer = styled.div`
@@ -62,16 +64,8 @@ const ContentContainer = styled.div`
   margin-top: 20px;
 `;
 
-
-// const PaymentStep = () => (
-//   <div>
-//     <h2>Paiement</h2>
-//     <p>Sélectionnez votre mode de paiement.</p>
-//   </div>
-// );
-
 const CheckoutPage = () => {
-  const [currentStep, setCurrentStep] = useState<"information" | "shipping" | "payment">("information");
+  const [currentStep, setCurrentStep] = useState<CheckoutStep>("information");
 
   return (
     <CheckoutContainer>

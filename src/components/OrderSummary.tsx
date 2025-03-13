@@ -57,7 +57,14 @@ const CheckoutButton = styled.button`
   }
 `;
 
-const OrderSummary = ({ subtotal, shipping, total, onCheckout }) => {
+interface OrderSummaryProps {
+    subtotal: number;
+    shipping: number;
+    total: number;
+    onCheckout: () => void;
+  }
+
+  const OrderSummary: React.FC<OrderSummaryProps> = ({ subtotal, shipping, total, onCheckout })  => {
   return (
     <SummaryContainer>
       <SummaryTitle>Order Summary</SummaryTitle>

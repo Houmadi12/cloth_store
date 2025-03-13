@@ -24,7 +24,7 @@ import {
   IconButtonFavori,
   MobileMenu,
   MobileNavLinks,
-} from "@/styles/NavbarStyle.tsx";
+} from "@/styles/NavbarStyle";
 
 interface NavbarProps {
   homePath?: string;

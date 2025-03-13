@@ -7,7 +7,6 @@ import ProductCard from "@/components/ProductCard";
 import { products3, Product } from "@/data/Products";
 import Link from "next/link";
 
-
 // Styled Components
 const Container = styled.div`
   width: 100%;
@@ -205,7 +204,9 @@ const ProductsFilter: React.FC = () => {
                 type="text"
                 placeholder="Search"
                 value={searchQuery}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)} // ✅ Correction TypeScript
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchQuery(e.target.value)
+                } // ✅ Correction TypeScript
               />
               <SearchIconContainer>
                 <svg
@@ -226,7 +227,9 @@ const ProductsFilter: React.FC = () => {
 
               <CategoryGrid>
                 {categories.map((category) => (
-                  <CategoryButton key={category.id}>{category.label}</CategoryButton>
+                  <CategoryButton key={category.id}>
+                    {category.label}
+                  </CategoryButton>
                 ))}
               </CategoryGrid>
             </SearchContainer>
@@ -234,14 +237,23 @@ const ProductsFilter: React.FC = () => {
 
           <ListProducts>
             {products3.map((product: Product, index: number) => (
-              <Link href={`/products/detailProducts`} key={index} passHref legacyBehavior>
+              <Link
+                href={`/products/detailProducts`}
+                key={product.id}
+                passHref
+                legacyBehavior
+              >
                 <ProductCardLink>
                   <ProductCard
-                    imageSrc={product.image} // ✅ Correspond bien aux props attendues
+                    imageSrc={product.image}
                     category={product.category}
-                    colorCount={product.colors} 
+                    colorCount={product.colors || product.Colors || 0}
                     title={product.name}
                     price={product.price}
+                    // Les props suivantes sont optionnelles maintenant
+                    quantity={1}
+                    onUpdateQuantity={() => {}}
+                    onRemove={() => {}}
                   />
                 </ProductCardLink>
               </Link>

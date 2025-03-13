@@ -5,6 +5,15 @@ import styled from "styled-components";
 import ProductCard from "./ProductCard";
 import OrderSummary from "./OrderSummary";
 
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+}
+
+
 const CartContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,24 +42,24 @@ const ProductList = styled.div`
 `;
 
 const ShippingStep = () => {
-  const [cart, setCart] = useState([
+  const [cart, setCart] = useState<CartItem[]>([
     {
       id: 1,
       name: "Full Sleeve Zipper",
       price: 99,
       quantity: 1,
-      image: "/images/img12.jpeg", // Using placeholder as fallback
+      image: "/images/img12.jpeg",
     },
     {
       id: 2,
       name: "Basic Slim Fit T-Shirt",
       price: 99,
       quantity: 1,
-      image: "imges/img11.jpeg", // Using placeholder as fallback
+      image: "/images/img13.jpeg",
     },
   ]);
 
-  const updateQuantity = (id, delta) => {
+  const updateQuantity = (id: number, delta: number) => {
     setCart(
       cart.map((item) =>
         item.id === id
@@ -60,7 +69,7 @@ const ShippingStep = () => {
     );
   };
 
-  const removeItem = (id) => {
+  const removeItem = (id: number) => {
     setCart(cart.filter((item) => item.id !== id));
   };
 
@@ -80,7 +89,15 @@ const ShippingStep = () => {
     <CartContainer>
       <ProductList>
         {cart.map((item) => (
-          <ProductCard/>
+          <ProductCard
+            key={item.id}
+            imageSrc={item.image}
+            title={item.name}
+            price={item.price}
+            quantity={item.quantity}
+            onUpdateQuantity={(delta) => updateQuantity(item.id, delta)}
+            onRemove={() => removeItem(item.id)}
+          />
         ))}
       </ProductList>
 
