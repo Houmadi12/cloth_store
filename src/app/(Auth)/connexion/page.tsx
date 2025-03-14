@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, FormEvent, ChangeEvent } from "react";
-import axios from "axios";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   Container,
   Title,
@@ -24,30 +25,39 @@ export default function Connexion() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     setLoading(true);
-
+  
     try {
-      const response = await axios.post("http://localhost:8000/api/users/login", {
+      const result = await signIn("credentials", {
         email,
-        motDePasse: password,
+        password,
+        redirect: false, // Empêche la redirection automatique pour gérer les erreurs manuellement
       });
-
-      setSuccess("Connexion réussie ! Redirection...");
-      localStorage.setItem("token", response.data.token);
-      setTimeout(() => {
-        window.location.href = "/products"; // Rediriger après connexion
-      }, 1500);
+  
+      console.log("Résultat de signIn:", result); // 🔍 Debug
+  
+      if (result?.error) {
+        setError(result.error); // Affiche l’erreur côté utilisateur
+      } else {
+        setSuccess("Connexion réussie ! Redirection...");
+        setTimeout(() => {
+          router.push("/products"); // ✅ Redirection après succès
+        }, 1500);
+      }
     } catch (err: any) {
-      setError(err.response?.data?.message || "Erreur de connexion");
+      console.error("Erreur de connexion :", err);
+      setError("Erreur de connexion");
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleBack = () => {
     window.history.back();
@@ -72,7 +82,7 @@ export default function Connexion() {
 
       <Container>
         <Title>Connexion</Title>
-        {/* {success && <SuccessMessage>{success}</SuccessMessage>} */}
+        {success && <SuccessMessage>{success}</SuccessMessage>}
 
         <Form onSubmit={handleSubmit}>
           <FormGroup>
@@ -109,7 +119,7 @@ export default function Connexion() {
           </ButtonContainer>
           <RegisterLink>
             Vous n'avez pas de compte ?{" "}
-            <StyledLink href="#">S'inscrire</StyledLink>
+            <StyledLink href="/Auth/register">S'inscrire</StyledLink>
           </RegisterLink>
         </Form>
       </Container>

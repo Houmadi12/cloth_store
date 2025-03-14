@@ -88,8 +88,8 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
               <NavItemText>Liste des produits</NavItemText>
             </NavItem>
           </Link>
-          <Link href="#" passHref legacyBehavior>
-            <NavItem as="a" active={pathname === "/admin/ajoutProduit"}>
+          <Link href="/admin/ajoutProduit" passHref legacyBehavior>
+            <NavItem as="a" active={pathname ==="/admin/ajoutProduit"}>
               <FaPlus size={16} />
               <NavItemText>Ajouter un produit</NavItemText>
             </NavItem>

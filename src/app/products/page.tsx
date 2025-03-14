@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import FilterProducts from "@/components/FilterProducts";
 import ProductCard from "@/components/ProductCard";
-import { products3, Product } from "@/data/Products";
+import { Product } from "@/data/Products"; // Gardons uniquement le type
 import Link from "next/link";
 
 // Styled Components
@@ -44,7 +45,7 @@ const Layout = styled.div`
 
 const Sidebar = styled.div`
   width: 100%;
-  display: flex; // ✅ Correction ici (dislpay → display)
+  display: flex;
   padding-top: 130px;
 
   @media (min-width: 768px) {
@@ -164,9 +165,28 @@ const ProductCardLink = styled.div`
   }
 `;
 
-const ProductsFilter: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+const LoadingMessage = styled.div`
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  padding: 40px 0;
+`;
 
+const ErrorMessage = styled.div`
+  font-size: 18px;
+  color: #e74c3c;
+  text-align: center;
+  padding: 40px 0;
+`;
+
+const ProductsFilter: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // Catégories disponibles
   const categories = [
     { id: "new", label: "NEW" },
     { id: "shirts", label: "SHIRTS" },
@@ -179,6 +199,37 @@ const ProductsFilter: React.FC = () => {
     { id: "jackets", label: "JACKETS" },
     { id: "coats", label: "COATS" },
   ];
+
+  // Récupérer les produits depuis l'API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('http://localhost:8000/api/products');
+        setProducts(response.data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        setError('Failed to load products. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Filtrer les produits en fonction de la recherche et de la catégorie
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory ? product.category.toLowerCase() === selectedCategory.toLowerCase() : true;
+    return matchesSearch && matchesCategory;
+  });
+
+  // Gérer le clic sur une catégorie
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategory(selectedCategory === categoryId ? null : categoryId);
+  };
 
   return (
     <Container>
@@ -206,7 +257,7 @@ const ProductsFilter: React.FC = () => {
                 value={searchQuery}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchQuery(e.target.value)
-                } // ✅ Correction TypeScript
+                }
               />
               <SearchIconContainer>
                 <svg
@@ -227,7 +278,14 @@ const ProductsFilter: React.FC = () => {
 
               <CategoryGrid>
                 {categories.map((category) => (
-                  <CategoryButton key={category.id}>
+                  <CategoryButton 
+                    key={category.id}
+                    onClick={() => handleCategoryClick(category.id)}
+                    style={{
+                      backgroundColor: selectedCategory === category.id ? '#f0f0f0' : 'transparent',
+                      borderColor: selectedCategory === category.id ? '#a0a0a0' : '#d0d0d0'
+                    }}
+                  >
                     {category.label}
                   </CategoryButton>
                 ))}
@@ -235,30 +293,40 @@ const ProductsFilter: React.FC = () => {
             </SearchContainer>
           </Header>
 
-          <ListProducts>
-            {products3.map((product: Product, index: number) => (
-              <Link
-                href={`/products/detailProducts`}
-                key={product.id}
-                passHref
-                legacyBehavior
-              >
-                <ProductCardLink>
-                  <ProductCard
-                    imageSrc={product.image}
-                    category={product.category}
-                    colorCount={product.colors || product.Colors || 0}
-                    title={product.name}
-                    price={product.price}
-                    // Les props suivantes sont optionnelles maintenant
-                    quantity={1}
-                    onUpdateQuantity={() => {}}
-                    onRemove={() => {}}
-                  />
-                </ProductCardLink>
-              </Link>
-            ))}
-          </ListProducts>
+          {loading ? (
+            <LoadingMessage>Loading products...</LoadingMessage>
+          ) : error ? (
+            <ErrorMessage>{error}</ErrorMessage>
+          ) : (
+            <ListProducts>
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product: Product, index) => (
+                  <Link
+                    href={`/products/detailProducts?id=${product.id}`}
+                    key={product.id}
+                    passHref
+                    legacyBehavior
+                  >
+                    <ProductCardLink>
+                      <ProductCard
+                        key={product.id || index}
+                        imageSrc={product.image}
+                        category={product.category}
+                        colorCount={product.colors || product.Colors || 0}
+                        title={product.name}
+                        price={product.price}
+                        quantity={1}
+                        onUpdateQuantity={() => {}}
+                        onRemove={() => {}}
+                      />
+                    </ProductCardLink>
+                  </Link>
+                ))
+              ) : (
+                <div>No products found matching your criteria.</div>
+              )}
+            </ListProducts>
+          )}
         </MainContent>
       </Layout>
     </Container>

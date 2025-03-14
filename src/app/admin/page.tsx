@@ -2,17 +2,26 @@
 
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa"
+import { FaEdit, FaTrash, FaEye, FaSync } from "react-icons/fa"
+import axios from "axios"
 
 // Définition de l'interface Product
 interface Product {
-  id: string;
+  _id: string; // MongoDB utilise généralement _id au lieu de id
   name: string;
   price: number;
   category: string;
   size?: string;
   color?: string;
   image?: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  countInStock: number;
+}
+
+interface ApiError {
+  message: string;
 }
 
 const ProductsContainer = styled.div`
@@ -47,7 +56,7 @@ const Table = styled.table`
 const Th = styled.th`
   text-align: left;
   padding: 12px;
-  background-color:rgba(85, 119, 179, 0.71);
+  background-color: rgba(85, 119, 179, 0.71);
   color: black;
   font-weight: 600;
   border-bottom: 2px solid #e2e8f0;
@@ -97,39 +106,102 @@ const LoadingState = styled.div`
   color: #718096;
 `
 
+const ErrorState = styled.div`
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+  color: #e53e3e;
+  background-color: #fff5f5;
+  border-radius: 4px;
+  border-left: 4px solid #e53e3e;
+`
+
+const RefreshButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: #3182ce;
+  }
+  
+  &:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+  }
+`
+
+// URL de l'API
+const API_URL = "http://localhost:8000/api/products";
+
 export default function AdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Fonction pour charger les produits avec axios
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await axios.get<Product[]>(API_URL);
+      setProducts(response.data);
+    } catch (err) {
+      console.error("Erreur lors du chargement des produits:", err);
+      
+      if (axios.isAxiosError(err) && err.response) {
+        // Erreur de type AxiosError avec une réponse
+        const errorData = err.response.data as ApiError;
+        setError(errorData.message || `Erreur ${err.response.status}: ${err.response.statusText}`);
+      } else {
+        // Erreur générique
+        setError("Une erreur est survenue lors du chargement des produits");
+      }
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  // Fonction pour rafraîchir la liste des produits
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchProducts();
+  };
 
   useEffect(() => {
-    // Fonction pour charger les produits
-    async function loadProducts() {
-      try {
-        // Remplacez par votre API endpoint
-        const response = await fetch('/api/products');
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error("Erreur lors du chargement des produits:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadProducts();
+    fetchProducts();
   }, []);
-
-  if (loading) {
-    return <LoadingState>Chargement des produits...</LoadingState>;
-  }
 
   return (
     <ProductsContainer>
       <ProductsHeader>
         <Title>Liste des Produits</Title>
+        <RefreshButton onClick={handleRefresh} disabled={loading || refreshing}>
+          <FaSync />
+          {refreshing ? "Actualisation..." : "Actualiser"}
+        </RefreshButton>
       </ProductsHeader>
       
-      {products.length === 0 ? (
+      {error && (
+        <ErrorState>
+          <p><strong>Erreur:</strong> {error}</p>
+          <p>Vérifiez que votre API est bien accessible à l'adresse {API_URL}</p>
+        </ErrorState>
+      )}
+      
+      {loading ? (
+        <LoadingState>Chargement des produits...</LoadingState>
+      ) : products.length === 0 ? (
         <EmptyState>Aucun produit trouvé.</EmptyState>
       ) : (
         <Table>
@@ -141,12 +213,13 @@ export default function AdminPage() {
               <Th>Catégorie</Th>
               <Th>Taille</Th>
               <Th>Couleur</Th>
+              <Th>Stock</Th>
               <Th>Actions</Th>
             </tr>
           </thead>
           <tbody>
             {products.map((product) => (
-              <tr key={product.id}>
+              <tr key={product._id}>
                 <Td>
                   {product.image ? (
                     <ProductImage src={product.image} alt={product.name} />
@@ -159,14 +232,15 @@ export default function AdminPage() {
                 <Td>{product.category}</Td>
                 <Td>{product.size || "-"}</Td>
                 <Td>{product.color || "-"}</Td>
+                <Td>{product.countInStock || "-"}</Td>
                 <Td>
-                  <ActionButton>
+                  <ActionButton title="Voir les détails">
                     <FaEye />
                   </ActionButton>
-                  <ActionButton>
+                  <ActionButton title="Modifier">
                     <FaEdit />
                   </ActionButton>
-                  <DeleteButton>
+                  <DeleteButton title="Supprimer">
                     <FaTrash />
                   </DeleteButton>
                 </Td>
